@@ -85,12 +85,19 @@ load_dotenv()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'assignment_db',                      # 사용할 DB 이름
-        'USER': 'postgres',                      # DB 사용자
+        'NAME': 'assignment_db',  # 사용할 DB 이름
+        'USER': 'postgres',  # DB 사용자
         # 5432 포트에 맞는 비밀번호 입력
         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "djdkzptl1"),
-        'HOST': 'localhost',                  # DB 호스트
+        'HOST': 'localhost',  # DB 호스트
         'PORT': '5432',
+    }
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1"),
     }
 }
 

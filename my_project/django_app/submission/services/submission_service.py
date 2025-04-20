@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from ...submission.utils.snapshot_cache import clear_snapshot_cache, get_snapshot_from_cache, save_snapshot_to_cache
+
 from ...quiz.repositories.choice_repository import ChoiceRepository
 from ...quiz.repositories.question_repository import QuestionRepository
 from ...quiz.repositories.quiz_repository import QuizRepository
@@ -40,19 +42,23 @@ class SubmissionService:
             for choice in self.choice_repository.get_choices_by_question(question.id)
         ]
 
-        # snapshot 생성 (랜덤 추출 및 랜덤 배치 적용)
-        question_snapshots = self.snapshot_generator.generate(
-            quiz=quiz,
-            all_questions=all_questions,
-            all_choices=all_choices,
-        )
-
         # Submission 객체 생성 및 저장
         submission = Submission.objects.create(
             user_id=user_id,
             quiz_id=quiz.quiz_id,
             created_at=datetime.now(),
         )
+
+        # snapshot 생성 (랜덤 추출 및 랜덤 배치 적용)
+        question_snapshots = get_snapshot_from_cache(submission.submission_id)
+        if not question_snapshots:
+            question_snapshots = self.snapshot_generator.generate(
+                quiz=quiz,
+                all_questions=all_questions,
+                all_choices=all_choices,
+            )
+            save_snapshot_to_cache(
+                submission.submission_id, question_snapshots)
 
         # SubmissionAnswer 목록 생성 및 저장
         answers = [
@@ -108,5 +114,7 @@ class SubmissionService:
 
         if str(submission.user_id) != str(user_id):
             raise PermissionError("You do not have access to this submission.")
+
+        clear_snapshot_cache(submission_id)
 
         return submission
