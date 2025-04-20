@@ -15,11 +15,15 @@ except AppRegistryNotReady:
     django.setup()
 
 from fastapi import FastAPI
-from .controllers import quiz_controller
+from .routers.controllers import quiz_controller
+from .routers.controllers import submission_controller
+
 
 app = FastAPI(
     title="Assignment about Quiz API",
 )
 
 quiz_router = quiz_controller.router
+submission_router = submission_controller.router
 app.include_router(quiz_router)
+app.include_router(submission_router)
