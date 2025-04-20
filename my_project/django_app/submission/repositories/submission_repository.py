@@ -1,4 +1,4 @@
-from submission.models.submission import Submission
+from ...submission.models.submission import Submission
 
 
 class SubmissionRepository:

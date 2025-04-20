@@ -1,7 +1,8 @@
 import random
-from quiz.models.quiz import Quiz
-from quiz.repositories.choice_repository import ChoiceRepository
-from quiz.repositories.question_repository import QuestionRepository
+
+from ...quiz.models.quiz import Quiz
+from ...quiz.repositories.choice_repository import ChoiceRepository
+from ...quiz.repositories.question_repository import QuestionRepository
 
 
 class SnapshotGenerator:

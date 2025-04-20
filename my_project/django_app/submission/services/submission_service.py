@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from quiz.repositories.choice_repository import ChoiceRepository
-from quiz.repositories.question_repository import QuestionRepository
-from quiz.repositories.quiz_repository import QuizRepository
+from ...quiz.repositories.choice_repository import ChoiceRepository
+from ...quiz.repositories.question_repository import QuestionRepository
+from ...quiz.repositories.quiz_repository import QuizRepository
 
 from ..models.submission_answer import SubmissionAnswer
 from ..models.submission import Submission
@@ -20,7 +20,7 @@ class SubmissionService:
     submission_answer_repository = SubmissionAnswerRepository()
     snapshot_generator = SnapshotGenerator()
     score_grader = ScoreGrader()
-    
+
     def get_submission_by_id(self, submission_id: str) -> Submission:
         return self.submission_repository.get_submission_by_id(submission_id)
 
@@ -73,7 +73,7 @@ class SubmissionService:
     def submit_answers(self, submission: Submission, user_id: str, answers_data: list[dict]) -> Submission:
         if str(submission.user_id) != str(user_id):
             raise PermissionError("You do not have access to this submission.")
-        
+
         # 채점하기
         result = self.score_grader.grade(answers_data)
 
@@ -93,7 +93,7 @@ class SubmissionService:
             )
 
         self.submission_answer_repository.bulk_save(answers)
-        
+
         submission.score = result.score  # 맞은 개수
         submission.submitted_at = datetime.now()
 
@@ -101,7 +101,8 @@ class SubmissionService:
 
     # 응시 결과 조회
     def get_submission_result(self, submission_id: str, user_id: str) -> Submission:
-        submission = self.submission_repository.get_submission_by_id(submission_id)
+        submission = self.submission_repository.get_submission_by_id(
+            submission_id)
         if not submission:
             raise ValueError("Submission not found")
 

@@ -1,7 +1,8 @@
 import uuid
 from django.db import models
 from django.conf import settings
-from quiz.models.quiz import Quiz
+
+from ...quiz.models.quiz import Quiz
 
 
 class Submission(models.Model):

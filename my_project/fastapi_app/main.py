@@ -5,7 +5,7 @@ from django.core.exceptions import AppRegistryNotReady
 
 # Django 환경 설정 로드
 if not os.environ.get("DJANGO_SETTINGS_MODULE"):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_app.config.settings")
 
 # Django가 로드되지 않은 경우 실행
 try:

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from quiz.repositories.choice_repository import ChoiceRepository
+from ...quiz.repositories.choice_repository import ChoiceRepository
 
 
 @dataclass

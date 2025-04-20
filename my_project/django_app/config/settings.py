@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'user.apps.UserConfig',
-    'quiz.apps.QuizConfig',
-    'submission.apps.SubmissionConfig'
+    'django_app.user.apps.UserConfig',
+    'django_app.quiz.apps.QuizConfig',
+    'django_app.submission.apps.SubmissionConfig'
 ]
 
 MIDDLEWARE = [
@@ -87,7 +87,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'assignment_db',                      # 사용할 DB 이름
         'USER': 'postgres',                      # DB 사용자
-        'PASSWORD': os.getenv("POSTGRES_PASSWORD", "djdkzptl1"),  # 5432 포트에 맞는 비밀번호 입력
+        # 5432 포트에 맞는 비밀번호 입력
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD", "djdkzptl1"),
         'HOST': 'localhost',                  # DB 호스트
         'PORT': '5432',
     }
