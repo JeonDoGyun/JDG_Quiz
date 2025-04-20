@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from ..dependencies.quiz_dependency import get_current_user_id, get_current_user_role, get_quiz_read_service
 from ...schemas.quiz_schema import QuizDetailResponse, QuizListResponseSchema
 from ...services.quiz_read_service import QuizReadService
+from ...docs.responses.quiz_docs import quiz_detail_docs, quiz_list_docs
 
 from django_app.user.permissions.roles import Role
 
@@ -11,7 +12,7 @@ from django_app.user.permissions.roles import Role
 router = APIRouter(prefix="/quizzes", tags=["Quizzes"])
 
 
-@router.get("", response_model=QuizListResponseSchema)
+@router.get("", response_model=QuizListResponseSchema, **quiz_list_docs)
 def get_quiz_list(
     page: int = Query(1, ge=1),
     size: int = Query(10, ge=1, le=100),  # default는 예시처럼 10으로 설정
@@ -22,7 +23,7 @@ def get_quiz_list(
     return quiz_service.get_quiz_list(role=role, user_id=user_id, page=page, size=size)
 
 
-@router.get("/{quiz_id}", response_model=QuizDetailResponse)
+@router.get("/{quiz_id}", response_model=QuizDetailResponse, **quiz_detail_docs)
 def get_quiz_detail(
     quiz_id: UUID,
     page: int = Query(1, ge=1),

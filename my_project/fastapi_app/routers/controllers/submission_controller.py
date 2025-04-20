@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path, status
 from fastapi.responses import JSONResponse
 
 from ...schemas.submission_schema import AnswerSubmissionRequest, SubmissionResultResponse
+from ...docs.responses.submission_docs import submission_init_docs, submit_answer_docs, submission_result_docs
 from ..dependencies.submission_dependency import get_submission_service
 from ..dependencies.quiz_dependency import get_current_user_id
 
@@ -9,8 +10,9 @@ from django_app.submission.services.submission_service import SubmissionService
 
 router = APIRouter(prefix="/submissions", tags=["Submissions"])
 
+
 # 응시 시작
-@router.post("/init/{quiz_id}")
+@router.post("/init/{quiz_id}", **submission_init_docs)
 def init_submission(
     quiz_id: int = Path(..., description="응시할 퀴즈 ID"),
     user_id: str = Depends(get_current_user_id),
@@ -23,8 +25,9 @@ def init_submission(
                  "submission_id": str(submission.id)}
     )
 
+
 # 응시 후 답안 제출 + 채점
-@router.post("/{submission_id}/answers")
+@router.post("/{submission_id}/answers", **submit_answer_docs)
 def submit_answers(
     submission_id: str,
     payload: AnswerSubmissionRequest,
@@ -48,15 +51,17 @@ def submit_answers(
         "submitted_at": updated_submission.submitted_at.isoformat()
     }
 
+
 # 응시 결과
-@router.get("/{submission_id}/result", response_model=SubmissionResultResponse)
+@router.get("/{submission_id}/result", response_model=SubmissionResultResponse, **submission_result_docs)
 def get_submission_result(
     submission_id: str,
     user_id: str = Depends(get_current_user_id),
     submission_service: SubmissionService = Depends(get_submission_service),
 ):
     try:
-        submission = submission_service.get_submission_result(submission_id, user_id)
+        submission = submission_service.get_submission_result(
+            submission_id, user_id)
     except ValueError:
         raise HTTPException(status_code=404, detail="Submission not found")
     except PermissionError:
