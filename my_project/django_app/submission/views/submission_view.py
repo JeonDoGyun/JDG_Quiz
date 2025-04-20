@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from ..serializers.submission_serializer import SubmissionSubmitSerializer
 from ..services.submission_service import SubmissionService
 from ..repositories.submission_repository import SubmissionRepository
+from ..docs.submission_docs import answer_submit_docs
 
 
 class SubmissionSubmitView(APIView):
@@ -13,6 +14,7 @@ class SubmissionSubmitView(APIView):
     submission_repository = SubmissionRepository()
     submission_service = SubmissionService()
 
+    @answer_submit_docs
     def post(self, request, submission_id):
         submission = self.submission_repository.get_submission_by_id(
             submission_id)

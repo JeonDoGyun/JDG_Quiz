@@ -10,6 +10,8 @@ from ..models.question import Question
 from ..models.choice import Choice
 from ..services.question_service import QuestionService
 from ..services.choice_service import ChoiceService
+from ..docs.question_docs import question_create_docs
+
 
 from user.permissions.roles import IsAdmin
 
@@ -22,6 +24,7 @@ class QuestionCreateView(APIView):
     question_service = QuestionService(question_repository)
     choice_service = ChoiceService(choice_repository)
 
+    @question_create_docs
     def post(self, request):
         serializer = QuestionCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
