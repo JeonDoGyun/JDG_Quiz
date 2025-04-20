@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'user.apps.UserConfig',
+    'quiz.apps.QuizConfig',
+    'submission.apps.SubmissionConfig'
 ]
 
 MIDDLEWARE = [
@@ -72,11 +78,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# PostgreSQL 사용 - 로컬 환경에서 동작하도록만 구현함
+
+load_dotenv()
+
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'assignment_db',                      # 사용할 DB 이름
+        'USER': 'postgres',                      # DB 사용자
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD", "djdkzptl1"),  # 5432 포트에 맞는 비밀번호 입력
+        'HOST': 'localhost',                  # DB 호스트
+        'PORT': '5432',
+    }
 }
 
 
@@ -120,3 +134,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'user.User'
